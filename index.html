@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART COLLEGE MANAGEMENT SYSTEM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .server-status {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .number {
+            color: #333;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        /* Buttons Grid */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-primary { background: #667eea; }
+        .btn-success { background: #28a745; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-danger { background: #dc3545; }
+        .btn-info { background: #17a2b8; }
+        .btn-secondary { background: #6c757d; }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* Tables */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Queue Items */
+        .queue-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .queue-item .roll {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .queue-item .issue {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Branch Selector */
+        .branch-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .branch-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #f0f0f0;
+            color: #333;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .branch-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Output Area */
+        .output-area {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+        }
+
+        .output-item {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .output-item:last-child {
+            border-bottom: none;
+        }
+
+        .output-item.success { color: #28a745; }
+        .output-item.error { color: #dc3545; }
+
+        /* Schedule */
+        .schedule-day {
+            margin-bottom: 20px;
+        }
+
+        .schedule-day h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .lecture-item {
+            background: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎓 SMART COLLEGE MANAGEMENT SYSTEM</h1>
+            <p>C Backend Server • HTTP API • Real-time Operations</p>
+            <div class="server-status">✓ Server Connected (Port 8080)</div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Students</h3>
+                <div class="number" id="statStudents">0</div>
+                <p>Linked List</p>
+            </div>
+            <div class="stat-card">
+                <h3>Undo Stack</h3>
+                <div class="number" id="statUndo">0</div>
+                <p>Last Deleted</p>
+            </div>
+            <div class="stat-card">
+                <h3>Fee Queue</h3>
+                <div class="number" id="statFee">0</div>
+                <p>FIFO Pending</p>
+            </div>
+            <div class="stat-card">
+                <h3>Complaints</h3>
+                <div class="number" id="statComp">0</div>
+                <p>Queue Pending</p>
+            </div>
+        </div>
+
+        <!-- Branch Selector -->
+        <div class="card">
+            <h2>📌 Select Branch</h2>
+            <div class="branch-selector" id="branchSelector">
+                <button class="branch-btn active" data-branch="CS">CS</button>
+                <button class="branch-btn" data-branch="EX">EX</button>
+                <button class="branch-btn" data-branch="EC">EC</button>
+                <button class="branch-btn" data-branch="AIDS">AIDS</button>
+                <button class="branch-btn" data-branch="CYBER">CYBER</button>
+                <button class="branch-btn" data-branch="ME">ME</button>
+            </div>
+            <p id="selectedBranch" style="color: #667eea; font-weight: bold;">Current: CS</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="card">
+            <h2>⚡ System Controls</h2>
+            <div class="button-grid">
+                <button class="btn btn-primary" onclick="showAddStudentForm()">➕ Add Student</button>
+                <button class="btn btn-warning" onclick="showDeleteForm()">✖ Delete Student</button>
+                <button class="btn btn-info" onclick="loadStudents()">📋 Display All</button>
+                <button class="btn btn-success" onclick="showFeeForm()">💰 Fee Submission</button>
+                <button class="btn btn-secondary" onclick="processFee()">⚙ Process Fee</button>
+                <button class="btn btn-warning" onclick="showComplaintForm()">📢 Add Complaint</button>
+                <button class="btn btn-info" onclick="processComplaint()">✅ Process Complaint</button>
+                <button class="btn btn-secondary" onclick="undoDelete()">↩ Undo Delete</button>
+                <button class="btn btn-primary" onclick="showSchedule()">🗓 Show Schedule</button>
+                <button class="btn btn-info" onclick="showSubjects()">📘 Show Subjects</button>
+                <button class="btn btn-success" onclick="showBookForm()">📚 Book Suggestion</button>
+                <button class="btn btn-danger" onclick="refreshStats()">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Student List -->
+                <div class="card">
+                    <h2>📋 Student List (Linked List)</h2>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Roll</th>
+                                    <th>Name</th>
+                                    <th>Branch</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody">
+                                <tr><td colspan="3" style="text-align: center;">No students</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Queues -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- Fee Queue -->
+                    <div class="card">
+                        <h2>💰 Fee Queue (FIFO)</h2>
+                        <div id="feeQueueList"></div>
+                    </div>
+
+                    <!-- Complaint Queue -->
+                    <div class="card">
+                        <h2>📢 Complaint Queue</h2>
+                        <div id="complaintQueueList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Forms Card -->
+                <div class="card" id="formsCard">
+                    <h2>📝 Action Panel</h2>
+                    <div id="formContent">
+                        <p style="color: #666; text-align: center;">Select an action to begin</p>
+                    </div>
+                </div>
+
+                <!-- Output Card -->
+                <div class="card">
+                    <h2>📤 Output / Results</h2>
+                    <div class="output-area" id="outputArea">
+                        <div class="output-item">System ready...</div>
+                    </div>
+                </div>
+
+                <!-- Subjects Preview -->
+                <div class="card">
+                    <h2>📚 Branch Details</h2>
+                    <div id="subjectsPreview">
+                        <p>Select a branch to view subjects</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Base URL
+        const API_BASE = 'http://localhost:8080/api';
+        let currentBranch = 'CS';
+
+        // ========== UTILITY FUNCTIONS ==========
+        function logToOutput(message, type = 'info') {
+            const output = document.getElementById('outputArea');
+            const item = document.createElement('div');
+            item.className = `output-item ${type}`;
+            item.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            output.insertBefore(item, output.firstChild);
+            
+            // Keep only last 10 items
+            while (output.children.length > 10) {
+                output.removeChild(output.lastChild);
+            }
+        }
+
+        async function fetchAPI(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        ...options.headers
+                    }
+                });
+                return await response.json();
+            } catch (error) {
+                logToOutput(`Network error: ${error.message}`, 'error');
+                return null;
+            }
+        }
+
+        async function refreshStats() {
+            const data = await fetchAPI('/stats');
+            if (data) {
+                document.getElementById('statStudents').textContent = data.students;
+                document.getElementById('statUndo').textContent = data.undo;
+                document.getElementById('statFee').textContent = data.fee;
+                document.getElementById('statComp').textContent = data.complaints;
+            }
+        }
+
+        // ========== STUDENT OPERATIONS ==========
+        async function loadStudents() {
+            const students = await fetchAPI('/students');
+            if (students) {
+                const tbody = document.getElementById('studentTableBody');
+                if (students.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">No students</td></tr>';
+                } else {
+                    tbody.innerHTML = students.map(s => `
+                        <tr>
+                            <td>${s.roll}</td>
+                            <td>${s.name}</td>
+                            <td>${s.branch}</td>
+                        </tr>
+                    `).join('');
+                }
+                logToOutput(`Loaded ${students.length} students`, 'success');
+                refreshStats();
+            }
+        }
+
+        function showAddStudentForm() {
+            document.getElementById('formContent').innerHTML = `
+                <form onsubmit="addStudent(event)">
+                    <div class="form-group">
+                        <label>Roll Number:</label>
+                        <input type="number" id="roll" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Branch:</label>
+                        <select id="branch" required>
+                            <option value="CS">CS</option>
+                            <option value="EX">EX</option>
+                            <option value="EC">EC</option>
+                            <option value="AIDS">AIDS</option>
+                            <option value="CYBER">CYBER</option>
+                            <option value="ME">ME</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Student</button>
+                </form>
+            `;
+        }
+
+        async function addStudent(event) {
+            event.preventDefault();
+            const roll = document.getElementById('roll').value;
+            const name = document.getElementById('name').value;
+            const branch = document.getElementById('branch').value;
+
+            const data = await fetchAPI('/students', {
+                method: 'POST',
+                body: `roll=${roll}&name=${encodeURIComponent(name)}&branch=${branch}`
+            });
+
+            if (data && data.status === 'success') {
+                logToOutput(data.message, 'success');
+                loadStudents();
+                document.getElementById('formContent').innerHTML = '<p style="color: #666; text-align: center;">Student added successfully!</p>';
+            }
+        }
+
+        function showDeleteForm() {
+            document.getElementById('formContent').innerHTML = `
+                <form onsubmit="deleteStudent(event)">
+                    <div class="form-group">
+                        <label>Roll Number to Delete:</label>
+                        <input type="number" id="deleteRoll" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Delete Student</button>
+                </form>
+            `;
+        }
+
+        async function deleteStudent(event) {
+            event.preventDefault();
+            const roll = document.getElementById('deleteRoll').value;
+
+            const data = await fetchAPI(`/students/${roll}`, {
+                method: 'DELETE'
+            });
+
+            if (data && data.status === 'success') {
+                logToOutput(data.message, 'warning');
+                loadStudents();
+                refreshStats();
+                document.getElementById('formContent').innerHTML = '<p style="color: #666; text-align: center;">Student deleted</p>';
+            } else if (data) {
+                logToOutput(data.message, 'error');
+            }
+        }
+
+        async function undoDelete() {
+            const data = await fetchAPI('/undo', { method: 'POST' });
+            if (data && data.status === 'success') {
+                logToOutput(data.message, 'success');
+                loadStudents();
+                refreshStats();
+            } else if (data) {
+                logToOutput(data.message, 'error');
+            }
+        }
+
+        // ========== FEE OPERATIONS ==========
+        function showFeeForm() {
+            document.getElementById('formContent').innerHTML = `
+                <form onsubmit="submitFee(event)">
+                    <div class="form-group">
+                        <label>Roll Number for Fee:</label>
+                        <input type="number" id="feeRoll" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit Fee</button>
+                </form>
+            `;
+        }
+
+        async function submitFee(event) {
+            event.preventDefault();
+            const roll = document.getElementById('feeRoll').value;
+
+            const data = await fetchAPI('/fee', {
+                method: 'POST',
+                body: `roll=${roll}`
+            });
+
+            if (data && data.status === 'success') {
+                logToOutput(data.message, 'success');
+                loadFeeQueue();
+                refreshStats();
+                document.getElementById('formContent').innerHTML = '<p style="color: #666; text-align: center;">Fee submitted</p>';
+            }
+        }
+
+        async function processFee() {
+            const data = await fetchAPI('/fee', { method: 'DELETE' });
+            if (data && data.status === 'success') {
+                logToOutput(data.message, 'success');
+                loadFeeQueue();
+                refreshStats();
+            } else if (data) {
+                logToOutput(data.message, 'error');
+            }
+        }
+
+        async function loadFeeQueue() {
+            // Fee queue data comes from stats and display
+            refreshStats();
+        }
+
+        // ========== COMPLAINT OPERATIONS ==========
+        function showComplaintForm() {
+            document.getElementById('formContent').innerHTML = `
+                <form onsubmit="submitComplaint(event)">
+                    <div class="form-group">
+                        <label>Roll Number:</label>
+                        <input type="number" id="compRoll" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Complaint:</label>
+                        <textarea id="complaint" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Submit Complaint</button>
+                </form>
+            `;
+        }
+
+        async function submitComplaint(event) {
+            event.preventDefault();
+            const roll = document.getElementById('compRoll').value;
+            const complaint = document.getElementById('complaint').value;
+
+            const data = await fetchAPI('/complaint', {
+                method: 'POST',
+                body: `roll=${roll}&issue=${encodeURIComponent(complaint)}`
+            });
+
+            if (data && data.status === 'success') {
+                logToOutput(data.message, 'success');
+                loadComplaintQueue();
+                refreshStats();
+                document.getElementById('formContent').innerHTML = '<p style="color: #666; text-align: center;">Complaint submitted</p>';
+            }
+        }
+
+        async function processComplaint() {
+            const data = await fetchAPI('/complaint', { method: 'DELETE' });
+            if (data && data.status === 'success') {
+                logToOutput(data.message, 'success');
+                loadComplaintQueue();
+                refreshStats();
+            } else if (data) {
+                logToOutput(data.message, 'error');
+            }
+        }
+
+        async function loadComplaintQueue() {
+            refreshStats();
+        }
+
+        // ========== BRANCH OPERATIONS ==========
+        document.querySelectorAll('.branch-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentBranch = this.dataset.branch;
+                document.getElementById('selectedBranch').textContent = `Current: ${currentBranch}`;
+                showSubjects();
+            });
+        });
+
+        async function showSubjects() {
+            const data = await fetchAPI(`/subjects/${currentBranch}`);
+            if (data) {
+                const preview = document.getElementById('subjectsPreview');
+                preview.innerHTML = `
+                    <h3 style="color: #667eea; margin-bottom: 10px;">${data.branch} - Subjects</h3>
+                    <ol style="margin-left: 20px;">
+                        ${data.subjects.map(s => `<li>${s}</li>`).join('')}
+                    </ol>
+                `;
+            }
+        }
+
+        async function showSchedule() {
+            const data = await fetchAPI(`/schedule/${currentBranch}`);
+            if (data && data.schedule) {
+                let html = `<h3 style="color: #667eea;">${data.branch} - Weekly Schedule</h3>`;
+                
+                data.schedule.forEach(day => {
+                    html += `<div class="schedule-day">
+                        <h4>${day.day}</h4>`;
+                    
+                    day.lectures.forEach(lec => {
+                        html += `<div class="lecture-item">
+                            <span><strong>L${lec.lecture}:</strong> ${lec.subject}</span>
+                            <span style="color: #666;">${lec.teacher}</span>
+                        </div>`;
+                    });
+                    
+                    html += `</div>`;
+                });
+                
+                document.getElementById('subjectsPreview').innerHTML = html;
+                logToOutput(`Loaded schedule for ${currentBranch}`, 'success');
+            }
+        }
+
+        function showBookForm() {
+            document.getElementById('formContent').innerHTML = `
+                <form onsubmit="showBookSuggestion(event)">
+                    <div class="form-group">
+                        <label>Subject Number (1-7):</label>
+                        <input type="number" id="subjectNum" min="1" max="7" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Get Book Suggestion</button>
+                </form>
+            `;
+        }
+
+        async function showBookSuggestion(event) {
+            event.preventDefault();
+            const subNum = document.getElementById('subjectNum').value;
+
+            const data = await fetchAPI(`/books/${currentBranch}/${subNum}`);
+            if (data && data.status === 'success') {
+                document.getElementById('subjectsPreview').innerHTML = `
+                    <h3 style="color: #667eea;">${data.branch} - ${data.subject}</h3>
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 10px;">
+                        <p><strong>Recommended Books:</strong></p>
+                        <p>📚 ${data.book1}</p>
+                        <p>📚 ${data.book2}</p>
+                    </div>
+                `;
+                logToOutput(`Showing book suggestions for ${data.subject}`, 'success');
+                document.getElementById('formContent').innerHTML = '<p style="color: #666; text-align: center;">Books displayed</p>';
+            }
+        }
+
+        // ========== INITIAL LOAD ==========
+        async function loadInitialData() {
+            await refreshStats();
+            await loadStudents();
+            await showSubjects();
+            
+            // Periodic refresh
+            setInterval(refreshStats, 5000);
+        }
+
+        loadInitialData();
+    </script>
+</body>
+</html>
